@@ -2,41 +2,71 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* AI Code Editor Design System - Dark Theme Inspired by VS Code/Cursor AI */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Base dark editor colors */
+    --background: 220 13% 9%;
+    --foreground: 220 14% 93%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 0.5rem;
+    /* Editor specific backgrounds */
+    --editor-bg: 220 13% 9%;
+    --sidebar-bg: 220 12% 7%;
+    --panel-bg: 220 13% 8%;
+    --terminal-bg: 220 14% 6%;
+    
+    /* Interactive elements */
+    --hover-bg: 220 14% 12%;
+    --active-bg: 220 15% 15%;
+    --selection-bg: 212 92% 45%;
+    
+    /* Text colors */
+    --text-primary: 220 14% 93%;
+    --text-secondary: 220 9% 70%;
+    --text-muted: 220 9% 46%;
+    --text-accent: 212 92% 65%;
+    
+    /* Syntax highlighting */
+    --syntax-keyword: 261 56% 70%;
+    --syntax-string: 95 50% 65%;
+    --syntax-comment: 220 9% 55%;
+    --syntax-function: 212 92% 65%;
+    --syntax-variable: 39 67% 69%;
+    
+    /* AI assistant colors */
+    --ai-accent: 142 76% 36%;
+    --ai-accent-light: 142 69% 58%;
+    --ai-bg: 220 13% 10%;
+    
+    /* Borders and dividers */
+    --border-subtle: 220 13% 15%;
+    --border-strong: 220 13% 20%;
+    
+    /* Status colors */
+    --success: 142 76% 36%;
+    --warning: 39 67% 69%;
+    --error: 0 84% 60%;
+    
+    /* Legacy mappings for shadcn compatibility */
+    --card: 220 13% 8%;
+    --card-foreground: 220 14% 93%;
+    --popover: 220 13% 8%;
+    --popover-foreground: 220 14% 93%;
+    --primary: 212 92% 45%;
+    --primary-foreground: 220 14% 93%;
+    --secondary: 220 13% 15%;
+    --secondary-foreground: 220 14% 93%;
+    --muted: 220 13% 15%;
+    --muted-foreground: 220 9% 70%;
+    --accent: 220 13% 15%;
+    --accent-foreground: 220 14% 93%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 220 14% 93%;
+    --border: 220 13% 15%;
+    --input: 220 13% 15%;
+    --ring: 212 92% 45%;
+    --radius: 0.375rem;
 
     --sidebar-background: 0 0% 98%;
 

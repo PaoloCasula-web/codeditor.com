@@ -61,7 +61,32 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
-				}
+				},
+				// Editor-specific colors
+				'editor-bg': 'hsl(var(--editor-bg))',
+				'sidebar-bg': 'hsl(var(--sidebar-bg))',
+				'panel-bg': 'hsl(var(--panel-bg))',
+				'terminal-bg': 'hsl(var(--terminal-bg))',
+				'hover-bg': 'hsl(var(--hover-bg))',
+				'active-bg': 'hsl(var(--active-bg))',
+				'selection-bg': 'hsl(var(--selection-bg))',
+				'text-primary': 'hsl(var(--text-primary))',
+				'text-secondary': 'hsl(var(--text-secondary))',
+				'text-muted': 'hsl(var(--text-muted))',
+				'text-accent': 'hsl(var(--text-accent))',
+				'syntax-keyword': 'hsl(var(--syntax-keyword))',
+				'syntax-string': 'hsl(var(--syntax-string))',
+				'syntax-comment': 'hsl(var(--syntax-comment))',
+				'syntax-function': 'hsl(var(--syntax-function))',
+				'syntax-variable': 'hsl(var(--syntax-variable))',
+				'ai-accent': 'hsl(var(--ai-accent))',
+				'ai-accent-light': 'hsl(var(--ai-accent-light))',
+				'ai-bg': 'hsl(var(--ai-bg))',
+				'border-subtle': 'hsl(var(--border-subtle))',
+				'border-strong': 'hsl(var(--border-strong))',
+				'success': 'hsl(var(--success))',
+				'warning': 'hsl(var(--warning))',
+				'error': 'hsl(var(--error))'
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
