@@ -2,6 +2,60 @@ import { useState } from 'react';
 import { ChevronRight, ChevronDown, File, Folder, FolderOpen, Search, MoreHorizontal } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
+// File type icons mapping
+const getFileIcon = (fileName: string) => {
+  const extension = fileName.split('.').pop()?.toLowerCase();
+  
+  switch (extension) {
+    case 'tsx':
+    case 'ts':
+      return (
+        <div className="h-4 w-4 mr-2 ml-5 flex items-center justify-center rounded text-xs font-bold bg-blue-600 text-white">
+          TS
+        </div>
+      );
+    case 'jsx':
+    case 'js':
+      return (
+        <div className="h-4 w-4 mr-2 ml-5 flex items-center justify-center rounded text-xs font-bold bg-yellow-500 text-black">
+          JS
+        </div>
+      );
+    case 'html':
+      return (
+        <div className="h-4 w-4 mr-2 ml-5 flex items-center justify-center rounded text-xs font-bold bg-orange-600 text-white">
+          H
+        </div>
+      );
+    case 'css':
+      return (
+        <div className="h-4 w-4 mr-2 ml-5 flex items-center justify-center rounded text-xs font-bold bg-blue-500 text-white">
+          C
+        </div>
+      );
+    case 'json':
+      return (
+        <div className="h-4 w-4 mr-2 ml-5 flex items-center justify-center rounded text-xs font-bold bg-green-600 text-white">
+          J
+        </div>
+      );
+    case 'md':
+      return (
+        <div className="h-4 w-4 mr-2 ml-5 flex items-center justify-center rounded text-xs font-bold bg-gray-600 text-white">
+          M
+        </div>
+      );
+    case 'ico':
+      return (
+        <div className="h-4 w-4 mr-2 ml-5 flex items-center justify-center rounded text-xs font-bold bg-purple-600 text-white">
+          I
+        </div>
+      );
+    default:
+      return <File className="h-4 w-4 mr-2 ml-5 text-text-secondary" />;
+  }
+};
+
 interface FileNode {
   name: string;
   type: 'file' | 'folder';
@@ -106,7 +160,7 @@ export const Sidebar = () => {
               )}
             </>
           ) : (
-            <File className="h-4 w-4 mr-2 ml-5 text-text-secondary" />
+            getFileIcon(node.name)
           )}
           <span className="text-sm flex-1">{node.name}</span>
           <Button
