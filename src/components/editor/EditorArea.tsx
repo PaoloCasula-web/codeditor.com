@@ -88,6 +88,7 @@ export default App;`
 export const EditorArea = () => {
   const [tabs, setTabs] = useState(mockTabs);
   const [activeTab, setActiveTab] = useState('1');
+  const [isEditing, setIsEditing] = useState(false);
 
   const closeTab = (id: string) => {
     const newTabs = tabs.filter(tab => tab.id !== id);
@@ -95,6 +96,14 @@ export const EditorArea = () => {
     if (activeTab === id && newTabs.length > 0) {
       setActiveTab(newTabs[0].id);
     }
+  };
+
+  const updateTabContent = (id: string, content: string) => {
+    setTabs(tabs.map(tab => 
+      tab.id === id 
+        ? { ...tab, content, isDirty: true }
+        : tab
+    ));
   };
 
   const currentTab = tabs.find(tab => tab.id === activeTab);
@@ -153,11 +162,45 @@ export const EditorArea = () => {
       </div>
 
       {/* Editor Content */}
-      <div className="flex-1 overflow-auto bg-editor-bg">
+      <div className="flex-1 overflow-hidden bg-editor-bg">
         {currentTab ? (
-          <div className="h-full p-4">
-            <div className="font-mono text-sm">
-              {renderCode(currentTab.content, currentTab.language)}
+          <div className="h-full flex">
+            {/* Line Numbers */}
+            <div className="flex flex-col bg-editor-bg border-r border-border-subtle py-4 px-2">
+              {currentTab.content.split('\n').map((_, index) => (
+                <div key={index} className="text-right text-xs leading-6 text-text-muted select-none w-10">
+                  {index + 1}
+                </div>
+              ))}
+            </div>
+            
+            {/* Editable Text Area */}
+            <div className="flex-1 relative">
+              <textarea
+                value={currentTab.content}
+                onChange={(e) => updateTabContent(currentTab.id, e.target.value)}
+                className="w-full h-full p-4 bg-transparent text-text-primary font-mono text-sm leading-6 resize-none outline-none border-none"
+                spellCheck={false}
+                style={{
+                  background: 'transparent',
+                  color: 'hsl(var(--text-primary))',
+                  caretColor: 'hsl(var(--text-accent))'
+                }}
+              />
+              
+              {/* Syntax Highlighting Overlay */}
+              <div 
+                className="absolute top-0 left-0 w-full h-full p-4 font-mono text-sm leading-6 pointer-events-none overflow-hidden"
+                style={{ color: 'transparent' }}
+              >
+                <div className="whitespace-pre-wrap">
+                  {currentTab.content.split('\n').map((line, index) => (
+                    <div key={index} className="leading-6">
+                      <SyntaxHighlighter line={line} language={currentTab.language} />
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         ) : (
