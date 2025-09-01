@@ -193,15 +193,21 @@ export const EditorArea = () => {
             </div>
             
             {/* Editable Text Area */}
-            <div className="flex-1 relative">
+            <div className="flex-1 relative overflow-hidden">
               <textarea
                 value={currentTab.content}
                 onChange={(e) => updateTabContent(currentTab.id, e.target.value)}
-                className="w-full h-full p-4 bg-transparent text-text-primary font-mono text-sm leading-6 resize-none outline-none border-none"
+                onScroll={(e) => {
+                  const overlay = e.currentTarget.nextElementSibling as HTMLElement;
+                  if (overlay) {
+                    overlay.scrollTop = e.currentTarget.scrollTop;
+                    overlay.scrollLeft = e.currentTarget.scrollLeft;
+                  }
+                }}
+                className="w-full h-full p-4 bg-transparent text-transparent font-mono text-sm leading-6 resize-none outline-none border-none caret-text-accent relative z-10 overflow-auto"
                 spellCheck={false}
                 style={{
                   background: 'transparent',
-                  color: 'hsl(var(--text-primary))',
                   caretColor: 'hsl(var(--text-accent))'
                 }}
               />
@@ -209,7 +215,9 @@ export const EditorArea = () => {
               {/* Syntax Highlighting Overlay */}
               <div 
                 className="absolute top-0 left-0 w-full h-full p-4 font-mono text-sm leading-6 pointer-events-none overflow-hidden"
-                style={{ color: 'transparent' }}
+                style={{ 
+                  color: 'hsl(var(--text-primary))'
+                }}
               >
                 <div className="whitespace-pre-wrap">
                   {currentTab.content.split('\n').map((line, index) => (
@@ -236,32 +244,65 @@ export const EditorArea = () => {
 
 const SyntaxHighlighter = ({ line, language }: { line: string; language: string }) => {
   const highlightSyntax = (text: string) => {
-    // Simple syntax highlighting
-    const keywords = ['import', 'export', 'const', 'let', 'var', 'function', 'return', 'if', 'else', 'for', 'while', 'class', 'interface', 'type', 'async', 'await', 'try', 'catch'];
-    const types = ['React', 'string', 'number', 'boolean', 'object', 'Props', 'FC'];
+    // Enhanced syntax highlighting patterns
+    const keywords = ['import', 'export', 'const', 'let', 'var', 'function', 'return', 'if', 'else', 'for', 'while', 'class', 'interface', 'type', 'async', 'await', 'try', 'catch', 'finally', 'throw', 'new', 'this', 'super', 'extends', 'implements', 'public', 'private', 'protected', 'static', 'readonly', 'abstract'];
+    const types = ['React', 'string', 'number', 'boolean', 'object', 'Props', 'FC', 'Component', 'useState', 'useEffect', 'useCallback', 'useMemo', 'useRef', 'HTMLElement', 'Promise', 'Array', 'Map', 'Set'];
+    const operators = ['=', '==', '===', '!=', '!==', '<', '>', '<=', '>=', '+', '-', '*', '/', '%', '&&', '||', '!', '?', ':', '=>', '...', '??'];
     
     let highlighted = text;
     
-    // Highlight strings
+    // Highlight strings (including template literals)
     highlighted = highlighted.replace(/(["'`])((?:\\.|(?!\1)[^\\])*?)\1/g, 
-      '<span class="text-syntax-string">$1$2$1</span>');
+      '<span style="color: hsl(var(--syntax-string))">$1$2$1</span>');
     
-    // Highlight comments
-    highlighted = highlighted.replace(/(\/\/.*$|\/\*[\s\S]*?\*\/)/gm,
-      '<span class="text-syntax-comment">$1</span>');
+    // Highlight template literal expressions
+    highlighted = highlighted.replace(/(\$\{[^}]*\})/g,
+      '<span style="color: hsl(var(--syntax-variable))">$1</span>');
+    
+    // Highlight single line comments
+    highlighted = highlighted.replace(/(\/\/.*$)/gm,
+      '<span style="color: hsl(var(--syntax-comment))">$1</span>');
+    
+    // Highlight multi-line comments
+    highlighted = highlighted.replace(/(\/\*[\s\S]*?\*\/)/gm,
+      '<span style="color: hsl(var(--syntax-comment))">$1</span>');
+    
+    // Highlight numbers
+    highlighted = highlighted.replace(/\b(\d+\.?\d*)\b/g,
+      '<span style="color: hsl(var(--syntax-number))">$1</span>');
+    
+    // Highlight JSX/TSX tags
+    highlighted = highlighted.replace(/(<\/?[a-zA-Z][a-zA-Z0-9]*)/g,
+      '<span style="color: hsl(var(--syntax-tag))">$1</span>');
+    
+    // Highlight JSX/TSX attributes
+    highlighted = highlighted.replace(/(\w+)=/g,
+      '<span style="color: hsl(var(--syntax-attribute))">$1</span>=');
+    
+    // Highlight object properties
+    highlighted = highlighted.replace(/(\w+):/g,
+      '<span style="color: hsl(var(--syntax-property))">$1</span>:');
     
     // Highlight keywords
     keywords.forEach(keyword => {
       const regex = new RegExp(`\\b${keyword}\\b`, 'g');
       highlighted = highlighted.replace(regex, 
-        `<span class="text-syntax-keyword">${keyword}</span>`);
+        `<span style="color: hsl(var(--syntax-keyword))">${keyword}</span>`);
     });
     
-    // Highlight types
+    // Highlight types and React hooks
     types.forEach(type => {
       const regex = new RegExp(`\\b${type}\\b`, 'g');
       highlighted = highlighted.replace(regex, 
-        `<span class="text-syntax-function">${type}</span>`);
+        `<span style="color: hsl(var(--syntax-function))">${type}</span>`);
+    });
+    
+    // Highlight operators
+    operators.forEach(op => {
+      const escapedOp = op.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const regex = new RegExp(`\\${escapedOp}`, 'g');
+      highlighted = highlighted.replace(regex, 
+        `<span style="color: hsl(var(--syntax-operator))">${op}</span>`);
     });
     
     return highlighted;

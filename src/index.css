@@ -27,12 +27,17 @@
     --text-muted: 220 9% 46%;
     --text-accent: 212 92% 65%;
     
-    /* Syntax highlighting */
-    --syntax-keyword: 261 56% 70%;
-    --syntax-string: 95 50% 65%;
-    --syntax-comment: 220 9% 55%;
-    --syntax-function: 212 92% 65%;
-    --syntax-variable: 39 67% 69%;
+    /* Enhanced syntax highlighting */
+    --syntax-keyword: 212 100% 80%;     /* Light blue for keywords */
+    --syntax-string: 142 76% 73%;       /* Green for strings */
+    --syntax-comment: 215 14% 54%;      /* Gray for comments */
+    --syntax-function: 271 81% 86%;     /* Purple for functions/types */
+    --syntax-variable: 39 67% 69%;      /* Yellow for variables */
+    --syntax-number: 29 70% 67%;        /* Orange for numbers */
+    --syntax-operator: 200 100% 80%;    /* Cyan for operators */
+    --syntax-tag: 347 87% 74%;          /* Pink for HTML tags */
+    --syntax-attribute: 187 47% 65%;    /* Teal for attributes */
+    --syntax-property: 261 45% 70%;     /* Light purple for properties */
     
     /* AI assistant colors */
     --ai-accent: 142 76% 36%;
