@@ -88,7 +88,7 @@ export default App;`
 export const EditorArea = () => {
   const [tabs, setTabs] = useState(mockTabs);
   const [activeTab, setActiveTab] = useState('1');
-  const [isEditing, setIsEditing] = useState(false);
+  const [cursorPositions, setCursorPositions] = useState<Record<string, number>>({});
 
   const closeTab = (id: string) => {
     const newTabs = tabs.filter(tab => tab.id !== id);
@@ -104,6 +104,23 @@ export const EditorArea = () => {
         ? { ...tab, content, isDirty: true }
         : tab
     ));
+  };
+
+  const handleCursorPosition = (id: string, position: number) => {
+    setCursorPositions(prev => ({ ...prev, [id]: position }));
+  };
+
+  const addNewTab = () => {
+    const newId = (tabs.length + 1).toString();
+    const newTab: Tab = {
+      id: newId,
+      name: `untitled-${newId}.tsx`,
+      content: '// New file\n',
+      language: 'typescript',
+      isDirty: true
+    };
+    setTabs([...tabs, newTab]);
+    setActiveTab(newId);
   };
 
   const currentTab = tabs.find(tab => tab.id === activeTab);
@@ -156,6 +173,7 @@ export const EditorArea = () => {
           variant="ghost"
           size="sm"
           className="h-8 w-8 p-0 m-1 hover:bg-hover-bg"
+          onClick={addNewTab}
         >
           <Plus className="h-4 w-4" />
         </Button>
