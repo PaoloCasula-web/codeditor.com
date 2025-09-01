@@ -243,55 +243,122 @@ export const EditorArea = () => {
 };
 
 const SyntaxHighlighter = ({ line, language }: { line: string; language: string }) => {
+  const getLanguageConfig = (lang: string) => {
+    switch (lang.toLowerCase()) {
+      case 'typescript':
+      case 'tsx':
+        return {
+          keywords: ['import', 'export', 'const', 'let', 'var', 'function', 'return', 'if', 'else', 'for', 'while', 'class', 'interface', 'type', 'async', 'await', 'try', 'catch', 'finally', 'throw', 'new', 'this', 'super', 'extends', 'implements', 'public', 'private', 'protected', 'static', 'readonly', 'abstract', 'enum', 'namespace'],
+          types: ['React', 'string', 'number', 'boolean', 'object', 'Props', 'FC', 'Component', 'useState', 'useEffect', 'useCallback', 'useMemo', 'useRef', 'HTMLElement', 'Promise', 'Array', 'Map', 'Set'],
+          accentColor: '--ts-blue'
+        };
+      case 'javascript':
+      case 'jsx':
+        return {
+          keywords: ['import', 'export', 'const', 'let', 'var', 'function', 'return', 'if', 'else', 'for', 'while', 'class', 'async', 'await', 'try', 'catch', 'finally', 'throw', 'new', 'this', 'super', 'extends'],
+          types: ['React', 'useState', 'useEffect', 'useCallback', 'useMemo', 'useRef', 'Promise', 'Array', 'Map', 'Set'],
+          accentColor: '--js-yellow'
+        };
+      case 'html':
+        return {
+          keywords: ['DOCTYPE', 'html', 'head', 'body', 'title', 'meta', 'link', 'script', 'style'],
+          types: [],
+          accentColor: '--html-orange'
+        };
+      case 'css':
+        return {
+          keywords: ['@media', '@import', '@keyframes', '@font-face', 'important', 'inherit', 'initial', 'unset'],
+          types: ['px', 'em', 'rem', 'vh', 'vw', '%', 'deg', 'rad', 'ms', 's'],
+          accentColor: '--css-blue'
+        };
+      case 'json':
+        return {
+          keywords: ['true', 'false', 'null'],
+          types: [],
+          accentColor: '--json-green'
+        };
+      case 'markdown':
+        return {
+          keywords: ['#', '##', '###', '####', '#####', '######', '-', '*', '+'],
+          types: [],
+          accentColor: '--md-purple'
+        };
+      default:
+        return {
+          keywords: ['import', 'export', 'const', 'let', 'var', 'function', 'return', 'if', 'else'],
+          types: [],
+          accentColor: '--syntax-keyword'
+        };
+    }
+  };
+
   const highlightSyntax = (text: string) => {
-    // Enhanced syntax highlighting patterns
-    const keywords = ['import', 'export', 'const', 'let', 'var', 'function', 'return', 'if', 'else', 'for', 'while', 'class', 'interface', 'type', 'async', 'await', 'try', 'catch', 'finally', 'throw', 'new', 'this', 'super', 'extends', 'implements', 'public', 'private', 'protected', 'static', 'readonly', 'abstract'];
-    const types = ['React', 'string', 'number', 'boolean', 'object', 'Props', 'FC', 'Component', 'useState', 'useEffect', 'useCallback', 'useMemo', 'useRef', 'HTMLElement', 'Promise', 'Array', 'Map', 'Set'];
+    const config = getLanguageConfig(language);
     const operators = ['=', '==', '===', '!=', '!==', '<', '>', '<=', '>=', '+', '-', '*', '/', '%', '&&', '||', '!', '?', ':', '=>', '...', '??'];
     
     let highlighted = text;
     
-    // Highlight strings (including template literals)
-    highlighted = highlighted.replace(/(["'`])((?:\\.|(?!\1)[^\\])*?)\1/g, 
-      '<span style="color: hsl(var(--syntax-string))">$1$2$1</span>');
+    // Language-specific highlighting
+    if (language === 'json') {
+      // JSON specific highlighting
+      highlighted = highlighted.replace(/(["'])((?:\\.|(?!\1)[^\\])*?)\1/g, 
+        '<span style="color: hsl(var(--syntax-string))">$1$2$1</span>');
+      highlighted = highlighted.replace(/:\s*([{[])/g, ': $1');
+      highlighted = highlighted.replace(/\b(true|false|null)\b/g,
+        '<span style="color: hsl(var(--syntax-keyword))">$1</span>');
+      highlighted = highlighted.replace(/\b(\d+\.?\d*)\b/g,
+        '<span style="color: hsl(var(--syntax-number))">$1</span>');
+    } else if (language === 'css') {
+      // CSS specific highlighting
+      highlighted = highlighted.replace(/([a-zA-Z-]+)(\s*:)/g,
+        '<span style="color: hsl(var(--syntax-property))">$1</span>$2');
+      highlighted = highlighted.replace(/(#[0-9a-fA-F]{3,6}|rgb\([^)]+\)|rgba\([^)]+\)|hsl\([^)]+\)|hsla\([^)]+\))/g,
+        '<span style="color: hsl(var(--syntax-number))">$1</span>');
+      highlighted = highlighted.replace(/(\d+)(px|em|rem|vh|vw|%|deg|rad|ms|s)/g,
+        '<span style="color: hsl(var(--syntax-number))">$1</span><span style="color: hsl(var(--syntax-function))">$2</span>');
+    } else if (language === 'html') {
+      // HTML specific highlighting
+      highlighted = highlighted.replace(/(<\/?[a-zA-Z][a-zA-Z0-9]*)/g,
+        '<span style="color: hsl(var(--syntax-tag))">$1</span>');
+      highlighted = highlighted.replace(/(\w+)=/g,
+        '<span style="color: hsl(var(--syntax-attribute))">$1</span>=');
+    } else {
+      // JavaScript/TypeScript highlighting
+      highlighted = highlighted.replace(/(["'`])((?:\\.|(?!\1)[^\\])*?)\1/g, 
+        '<span style="color: hsl(var(--syntax-string))">$1$2$1</span>');
+      
+      highlighted = highlighted.replace(/(\$\{[^}]*\})/g,
+        '<span style="color: hsl(var(--syntax-variable))">$1</span>');
+      
+      highlighted = highlighted.replace(/(<\/?[a-zA-Z][a-zA-Z0-9]*)/g,
+        '<span style="color: hsl(var(--syntax-tag))">$1</span>');
+      
+      highlighted = highlighted.replace(/(\w+)=/g,
+        '<span style="color: hsl(var(--syntax-attribute))">$1</span>=');
+      
+      highlighted = highlighted.replace(/(\w+):/g,
+        '<span style="color: hsl(var(--syntax-property))">$1</span>:');
+    }
     
-    // Highlight template literal expressions
-    highlighted = highlighted.replace(/(\$\{[^}]*\})/g,
-      '<span style="color: hsl(var(--syntax-variable))">$1</span>');
-    
-    // Highlight single line comments
+    // Common highlighting for all languages
     highlighted = highlighted.replace(/(\/\/.*$)/gm,
       '<span style="color: hsl(var(--syntax-comment))">$1</span>');
     
-    // Highlight multi-line comments
     highlighted = highlighted.replace(/(\/\*[\s\S]*?\*\/)/gm,
       '<span style="color: hsl(var(--syntax-comment))">$1</span>');
     
-    // Highlight numbers
     highlighted = highlighted.replace(/\b(\d+\.?\d*)\b/g,
       '<span style="color: hsl(var(--syntax-number))">$1</span>');
     
-    // Highlight JSX/TSX tags
-    highlighted = highlighted.replace(/(<\/?[a-zA-Z][a-zA-Z0-9]*)/g,
-      '<span style="color: hsl(var(--syntax-tag))">$1</span>');
-    
-    // Highlight JSX/TSX attributes
-    highlighted = highlighted.replace(/(\w+)=/g,
-      '<span style="color: hsl(var(--syntax-attribute))">$1</span>=');
-    
-    // Highlight object properties
-    highlighted = highlighted.replace(/(\w+):/g,
-      '<span style="color: hsl(var(--syntax-property))">$1</span>:');
-    
-    // Highlight keywords
-    keywords.forEach(keyword => {
+    // Highlight keywords with language-specific color
+    config.keywords.forEach(keyword => {
       const regex = new RegExp(`\\b${keyword}\\b`, 'g');
       highlighted = highlighted.replace(regex, 
-        `<span style="color: hsl(var(--syntax-keyword))">${keyword}</span>`);
+        `<span style="color: hsl(var(${config.accentColor}))">${keyword}</span>`);
     });
     
-    // Highlight types and React hooks
-    types.forEach(type => {
+    // Highlight types and functions
+    config.types.forEach(type => {
       const regex = new RegExp(`\\b${type}\\b`, 'g');
       highlighted = highlighted.replace(regex, 
         `<span style="color: hsl(var(--syntax-function))">${type}</span>`);

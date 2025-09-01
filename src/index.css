@@ -27,7 +27,7 @@
     --text-muted: 220 9% 46%;
     --text-accent: 212 92% 65%;
     
-    /* Enhanced syntax highlighting */
+    /* Enhanced syntax highlighting by language */
     --syntax-keyword: 212 100% 80%;     /* Light blue for keywords */
     --syntax-string: 142 76% 73%;       /* Green for strings */
     --syntax-comment: 215 14% 54%;      /* Gray for comments */
@@ -38,6 +38,14 @@
     --syntax-tag: 347 87% 74%;          /* Pink for HTML tags */
     --syntax-attribute: 187 47% 65%;    /* Teal for attributes */
     --syntax-property: 261 45% 70%;     /* Light purple for properties */
+    
+    /* Language-specific accent colors */
+    --ts-blue: 212 100% 80%;            /* TypeScript blue */
+    --js-yellow: 45 100% 70%;           /* JavaScript yellow */
+    --html-orange: 16 100% 70%;         /* HTML orange */
+    --css-blue: 200 100% 70%;           /* CSS blue */
+    --json-green: 142 76% 73%;          /* JSON green */
+    --md-purple: 271 81% 86%;           /* Markdown purple */
     
     /* AI assistant colors */
     --ai-accent: 142 76% 36%;
